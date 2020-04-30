@@ -1,5 +1,3 @@
-from Hora import Hora
-
 class FechaHora:
     __Dia = int
     __Mes = int
@@ -66,38 +64,39 @@ class FechaHora:
         if self.__Mes > 12:
             self.__Mes = 1
             self.__Anio += 1
-    def __add__(self, Dias):
-        if type(Dias)== int:
-            aux = FechaHora(self.__Dia + Dias, self.__Mes, self.__Anio, self.__Hora, self.__Min, self.__Segs)
+    def __add__(self, Hora):
+        if type(Hora)== int:
+            aux = FechaHora(self.__Dia, self.__Mes, self.__Anio, self.__Hora + Hora, self.__Min, self.__Segs)
             aux.controla()
             return aux
-        elif type(Dias) == Hora:
-            aux = FechaHora(self.__Dia, self.__Mes, self.__Anio, self.__Hora + Dias.gethora(), self.__Min + Dias.getmins(), self.__Segs + Dias.getsegs())
+    def __radd__(self, Hora):
+        if type(Hora)== int:
+            aux = FechaHora(self.__Dia, self.__Mes, self.__Anio, self.__Hora + Hora, self.__Min, self.__Segs)
             aux.controla()
             return aux
-    def __radd__(self, Dias):
-        if type(Dias)== int:
-            aux = FechaHora(self.__Dia + Dias, self.__Mes, self.__Anio, self.__Hora, self.__Min, self.__Segs)
+    def __sub__(self, Hora):
+        if type(Hora)== int:
+            aux = FechaHora(self.__Dia, self.__Mes, self.__Anio, self.__Hora - Hora, self.__Min, self.__Segs)
             aux.controla()
             return aux
-        elif type(Dias) == Hora:
-            aux = FechaHora(self.__Dia, self.__Mes, self.__Anio, self.__Hora + Dias.gethora(), self.__Min + Dias.getmins(), self.__Segs + Dias.getsegs())
-            aux.controla()
-            return aux
-    def __sub__(self, Dias):
-        if type(Dias)== int:
-            return FechaHora(self.__Dia - Dias, self.__Mes, self.__Anio, self.__Hora , self.__Min, self.__Segs)
-    def __rsub__(self, Dias):
-        if type(Dias)== int:
-            return FechaHora(self.__Dia - Dias, self.__Mes, self.__Anio, self.__Hora , self.__Min, self.__Segs)
     def __gt__(self, otro):
         if type(otro) == FechaHora:
             if self.__Hora > otro.gethora():
                 return True
+            elif self.__Hora == otro.gethora():
+                if self.__Min > otro.getmins():
+                    return True
+                elif self.__Min == otro.getmins():
+                    if self.__Segs > otro.getsegs():
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
             else:
                 return False
         elif type(otro) == int:
-            if self.__Hora > otro.gethora():
+            if self.__Hora > otro:
                 return True
             else:
                 return False
